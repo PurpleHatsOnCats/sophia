@@ -1,5 +1,6 @@
 import * as firebase from './firebase.js'
 
+const met = document.querySelector("#text-met");
 const story = document.querySelector("#text-story");
 const cool = document.querySelector("#text-cool");
 const imgSelect = document.querySelector("#img");
@@ -8,6 +9,7 @@ const signature = document.querySelector('#text-signature');
 const btn = document.querySelector("#btn-send");
 const warning = document.querySelector("#warning");
 const success = document.querySelector("#success");
+
 
 let imgData;
 
@@ -59,6 +61,7 @@ const setUpUI = () => {
     signature.addEventListener("input", checkSignature);
     checkSignature();
 
+    met.addEventListener("input", clearSuccess);
     signature.addEventListener("input", clearSuccess);
     story.addEventListener("input", clearSuccess);
     cool.addEventListener("input", clearSuccess);
@@ -66,6 +69,7 @@ const setUpUI = () => {
 
     btn.addEventListener("click", async () => {
         await firebase.saveAll({
+            met: met.value,
             story: story.value,
             cool: cool.value,
             img: imgData,

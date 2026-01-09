@@ -21,12 +21,14 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 
 
-function saveAll({ story, cool, img, signature }) {
+function saveAll({met, story, cool, img, signature }) {
     const dataListLoc = ref(db, "answers/" + signature);
     return set(dataListLoc, {
+        met, met,
         story: story,
         cool: cool,
-        img: img
+        img: img,
+        signature: signature
     });
 }
 
