@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sophia's Birthday</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <script src="https://kit.fontawesome.com/201ff3ec11.js" crossorigin="anonymous"></script>
+    <script type="module" src="./src/main.js"></script>
 </head>
+
 <body>
-    
+    <div class="block m-2">
+        <h1 class="title is-1">How do you know sophia?</h1>
+        <p>Basically be heartfelt and full of glaze. Leave anything blank if you can't think of something.</p>
+    </div>
+    <div class="block m-5">
+        <label for="text-story" class="is-size-3">What is your favorite story about sophia?</label><br>
+        <textarea name="text-story" class="textarea is-size-5" id="text-story" placeholder="The story..."
+            rows="10"></textarea>
+    </div>
+    <div class="block m-5">
+        <label for="text-cool" class="is-size-3">What is the coolest thing about sophia?</label><br>
+        <textarea name="text-cool" class="textarea is-size-5" id="text-cool" placeholder="Cool thing..."
+            rows="5"></textarea>
+    </div>
+    <div class="block m-5">
+        <label for="file-picture" class="is-size-3">What is your favorite picture of Sophia?</label><br>
+        <div class="file" name="file-picture">
+            <label class="file-label">
+                <input id="img" class="file-input" type="file" name="resume" accept="image/*" />
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label"> Choose a file… </span>
+                </span>
+                <span class="file-name"> No file uploaded </span>
+            </label>
+        </div>
+        <div id="imagePreview"></div>
+    </div>
+    <div class="block m-5">
+        <label for="text-signature" class="is-size-3">Who are you?</label><br>
+        <textarea name="text-signature" class="textarea is-size-5" id="text-signature" placeholder="Your name..."
+            rows="1"></textarea>
+    </div>
+    <p id="warning" class="has-text-centered has-text-warning is-size-4"></p>
+    <p id="success" class="has-text-centered has-text-success is-size-4"></p>
+    <button id="btn-send" class="button is-success is-large is-fullwidth m-5">Submit</button>
 </body>
+
 </html>

@@ -1,21 +1,79 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import * as firebase from './firebase.js'
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyAMcR0HacUdU09gfCB73DOZn-irQZebFZw",
-    authDomain: "sophia-9971a.firebaseapp.com",
-    projectId: "sophia-9971a",
-    storageBucket: "sophia-9971a.firebasestorage.app",
-    messagingSenderId: "956577458356",
-    appId: "1:956577458356:web:c24328c49634f9f6c98fe1",
-    measurementId: "G-MSRQB5XB57"
-};
+const story = document.querySelector("#text-story");
+const cool = document.querySelector("#text-cool");
+const imgSelect = document.querySelector("#img");
+const imgPreview = document.querySelector('#imagePreview');
+const signature = document.querySelector('#text-signature');
+const btn = document.querySelector("#btn-send");
+const warning = document.querySelector("#warning");
+const success = document.querySelector("#success");
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+let imgData;
+
+imgSelect.addEventListener('change', function (event) {
+    imgPreview.innerHTML = '';
+    const files = event.target.files;
+    if (files.length > 0) {
+        const file = files[0];
+
+        // Ensure the selected file is an image
+        if (file.type.startsWith('image/')) {
+            document.querySelector('.file-name').innerHTML = file.name;
+            // Use FileReader to read the file content
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Create an image element
+                const img = document.createElement('img');
+                // Set the image source to the result of the FileReader (the image data URL)
+                img.src = e.target.result;
+                imgData = e.target.result;
+                // Optional: Add a class for styling
+                img.classList.add('preview-image');
+                // Append the image to the preview container
+                imgPreview.appendChild(img);
+            };
+
+            // Read the file as a Data URL (base64 encoded string)
+            reader.readAsDataURL(file);
+        }
+    }
+});
+
+const checkSignature = () => {
+    if (signature.value != "") {
+        btn.disabled = false
+        warning.innerHTML = "";
+    }
+    else {
+        btn.disabled = true;
+        warning.innerHTML = "Add your name before submitting!"
+    }
+}
+
+const clearSuccess = () => {
+    success.innerHTML = "";
+}
+const setUpUI = () => {
+    signature.addEventListener("input", checkSignature);
+    checkSignature();
+
+    signature.addEventListener("input", clearSuccess);
+    story.addEventListener("input", clearSuccess);
+    cool.addEventListener("input", clearSuccess);
+    img.addEventListener("input", clearSuccess);
+
+    btn.addEventListener("click", async () => {
+        await firebase.saveAll({
+            story: story.value,
+            cool: cool.value,
+            img: imgData,
+            signature: signature.value
+        });
+        success.innerHTML = "Successfully submitted!";
+    });
+}
+
+
+setUpUI();
