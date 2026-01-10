@@ -11,7 +11,7 @@ const warning = document.querySelector("#warning");
 const success = document.querySelector("#success");
 
 
-let imgData;
+let imgData = null;
 
 imgSelect.addEventListener('change', function (event) {
     imgPreview.innerHTML = '';
