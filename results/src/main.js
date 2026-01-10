@@ -37,15 +37,11 @@ const updateDisplay = async () => {
     }).join("");
 
     // Add click events for slide
-    console.log(results.children);
-    for(let i = 0; i < results.children.length; i++){
-        console.log( results.children[i]);
-        results.children[i].addEventListener("click",()=>{
-            if(slide){
+    for (let i = 0; i < results.children.length; i++) {
+        results.children[i].addEventListener("click", () => {
+            if (slide && currentCard != i && enableClick) {
                 setCurrentCard(i);
-                
             }
-            console.log("set card to: " + i);
         });
     }
     setCurrentCard(0);
@@ -85,45 +81,80 @@ const setupUI = () => {
 };
 
 let slide = false;
-const setSlide = (bool)=>{
+const setSlide = (bool) => {
     slide = bool;
-    if(bool){
+    if (bool) {
         results.classList.remove("grid");
         results.classList.add("carousel-cards");
         carousel.classList.add("carousel");
         setCurrentCard(0);
     }
-    else{
+    else {
         results.classList.add("grid");
         results.classList.remove("carousel-cards");
         carousel.classList.remove("carousel");
 
         let cards = results.children;
-        for(let i = 0; i < cards.length; i++){
+        for (let i = 0; i < cards.length; i++) {
             cards[i].style.transform = ""
         }
     }
 }
 
-let currentSlide;
+let currentCard;
 const setCurrentCard = (current) => {
     let cards = results.children;
-    currentSlide = current;
-    if(cards.length == 0 || !slide){
+    currentCard = current;
+    if (cards.length == 0 || !slide) {
         return;
     }
-    for(let i = 0; i < cards.length; i++){
-        cards[i].style.transform = `translate(${
-            -(cards[i].clientWidth*(current+0.5) + parseInt(window.getComputedStyle(cards[i]).marginLeft) * (2*current+1))}px,0) 
-            scale(${1-Math.pow(Math.abs(current-i),2)/6})`;
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].style.transform = `translate(${-(cards[i].clientWidth * (current + 0.5) + parseInt(window.getComputedStyle(cards[i]).marginLeft) * (2 * current + 1))}px,0) 
+            scale(${1 - Math.pow(Math.abs(current - i), 2) / 6})`;
     }
 }
 
-window.addEventListener('resize', ()=>{
-    if(slide){
-        setCurrentCard(currentSlide);
+window.addEventListener('resize', () => {
+    if (slide) {
+        setCurrentCard(currentCard);
     }
 });
+
+document.querySelector("#carousel").addEventListener("mousedown", lock);
+document.querySelector("#carousel").addEventListener("touchstart", lock);
+
+document.querySelector("#carousel").addEventListener("mousemove", drag);
+document.querySelector("#carousel").addEventListener("touchmove", drag);
+
+document.querySelector("#carousel").addEventListener("mouseup", move);
+document.querySelector("#carousel").addEventListener("touchend", move);
+
+window.addEventListener("click", () => { enableClick = true; });
+
+function unify(e) { return e.changedTouches ? e.changedTouches[0] : e };
+let x0 = null;
+function lock(e) { x0 = unify(e).clientX; };
+let enableClick = true;
+const dragMin = 32;
+function drag(e) {
+    if (x0 || x0 === 0) {
+        let dx = unify(e).clientX - x0;
+        if (Math.abs(dx) > dragMin) {
+            enableClick = false;
+        }
+    }
+}
+
+function move(e) {
+    if (x0 || x0 === 0) {
+        let dx = unify(e).clientX - x0, s = Math.sign(dx);
+
+        if ((currentCard > 0 || s < 0) && (currentCard < results.children.length - 1 || s > 0) && (Math.abs(dx) > dragMin)) {
+            setCurrentCard(currentCard - s);
+        }
+        x0 = null
+    }
+};
 
 setupUI();
 setSlide(true);
