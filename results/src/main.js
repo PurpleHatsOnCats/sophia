@@ -110,7 +110,7 @@ const setCurrentCard = (current) => {
     }
     for (let i = 0; i < cards.length; i++) {
         cards[i].style.transform = `translate(${-(cards[i].clientWidth * (current + 0.5) + parseInt(window.getComputedStyle(cards[i]).marginLeft) * (2 * current + 1))}px,0) 
-            scale(${1 - Math.pow(Math.abs(current - i), 2) / 6})`;
+            scale(${Math.max(1 - Math.pow(Math.abs(current - i), 2) / 6,0)})`;
     }
 }
 
