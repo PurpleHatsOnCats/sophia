@@ -14,14 +14,14 @@ const updateDisplay = async () => {
 
         if (answer.img) {
             format += `
-                <div class=card-image>
-                    <figure class=image is-4by3>
+                <div class=\"card-image is-flex-grow-1\">
+                    <figure class=\"image\">
                         <img src=${answer.img} alt=\"Favorite picture"/>
                     </figure>
                 </div>`
         }
-        format += "<div class=card-content>";
-        format += `<h3 class="title is-3 has-text-centered">${answer.signature}</h3>`
+        format += "<div class=\"card-content\">";
+        format += `<h3 class=\"title is-3 has-text-centered\">${answer.signature}</h3>`
         if (answer.met) {
             format += formatParagraph("When did you meet?", answer.met);
         }
@@ -105,8 +105,10 @@ const setSlide = (bool)=>{
     }
 }
 
+let currentSlide;
 const setCurrentCard = (current) => {
     let cards = results.children;
+    currentSlide = current;
     if(cards.length == 0 || !slide){
         return;
     }
@@ -117,6 +119,11 @@ const setCurrentCard = (current) => {
     }
 }
 
+window.addEventListener('resize', ()=>{
+    if(slide){
+        setCurrentCard(currentSlide);
+    }
+});
 
 setupUI();
 setSlide(true);
