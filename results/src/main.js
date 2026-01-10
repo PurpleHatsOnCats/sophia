@@ -132,10 +132,10 @@ document.querySelector("#carousel").addEventListener("touchend", move);
 window.addEventListener("click", () => { enableClick = true; });
 
 function unify(e) { return e.changedTouches ? e.changedTouches[0] : e };
-let x0 = null;
-function lock(e) { x0 = unify(e).clientX; };
+let x0, y0 = null;
+function lock(e) { x0 = unify(e).clientX; y0 = unify(e).clientY};
 let enableClick = true;
-const dragMin = 32;
+const dragMin = 64;
 function drag(e) {
     if (x0 || x0 === 0) {
         let dx = unify(e).clientX - x0;
@@ -147,9 +147,10 @@ function drag(e) {
 
 function move(e) {
     if (x0 || x0 === 0) {
-        let dx = unify(e).clientX - x0, s = Math.sign(dx);
-
-        if ((currentCard > 0 || s < 0) && (currentCard < results.children.length - 1 || s > 0) && (Math.abs(dx) > dragMin)) {
+        let dx = unify(e).clientX - x0, s = Math.sign(dx), dy = unify(e).clientY - y0;
+        console.log(dx);
+        if ((currentCard > 0 || s < 0) && (currentCard < results.children.length - 1 || s > 0) && 
+            (Math.abs(dx) > dragMin && Math.abs(dy) < Math.abs(dx))) {
             setCurrentCard(currentCard - s);
         }
         x0 = null
